@@ -1,4 +1,4 @@
-module com.example.demo3 {
+module com.example.demo {
     requires javafx.controls;
     requires javafx.fxml;
 
@@ -7,12 +7,12 @@ module com.example.demo3 {
     requires com.almasb.fxgl.all;
     requires java.sql;
 
-    opens com.example.demo3 to javafx.fxml;
-    opens com.example.demo3.Controllers to javafx.fxml;
-    exports com.example.demo3;
-    exports com.example.demo3.Entities;
-    exports com.example.demo3.DAOs;
-    exports com.example.demo3.Controllers;
-    opens com.example.demo3.Entities to javafx.fxml;
+    opens com.example.demo to javafx.fxml;
+    opens com.example.demo.Controllers to javafx.fxml;
+    exports com.example.demo;
+    exports com.example.demo.Entities;
+    exports com.example.demo.DAOs;
+    exports com.example.demo.Controllers;
+    opens com.example.demo.Entities to javafx.fxml;
 
 }
