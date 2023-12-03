@@ -50,7 +50,7 @@ public class ConsulterAva implements Initializable {
         montantField.setText(SharedData.currentAva.getMontantCalcul().toString());
         idField.setText(SharedData.currentAva.getID().toString());
         typeField.setText(SharedData.currentAva.getType().toString());
-        soldeAva.setText(SharedData.currentAva.getSoldeAvgit remote add origin https://github.com/your-username/your-repo.gita().toString());
+        soldeAva.setText(SharedData.currentAva.getSoldeAva().toString());
         dateField.setText(SharedData.currentAva.getDateDomiciliation().toString());
 
 
