@@ -8,17 +8,19 @@ import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
+import java.awt.Desktop;
+
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class AvaManagerView implements Initializable {
@@ -38,6 +40,8 @@ public class AvaManagerView implements Initializable {
 
     @FXML
     private TableColumn<AvaFolder, String> DeclarationFiscal;
+    @FXML
+    private  TableColumn<AvaFolder,String> Status;
 
 
 
@@ -47,9 +51,17 @@ public class AvaManagerView implements Initializable {
     @FXML
     private TextField searchAva_field;
     @FXML
-    private Button openFolder_bnt;
+    private Button logout;
     private ObservableList<AvaFolder> dataList;
 
+    public void Logout() throws IOException {
+        logout.getScene().getWindow().hide();
+        Parent root = FXMLLoader.load(getClass().getResource("/com/example/demo/login-view.fxml"));
+        Stage stage = new Stage();
+        Scene scene = new Scene(root,600,400);
+        stage.setScene(scene);
+        stage.show();
+    }
 
 
 
@@ -59,6 +71,15 @@ public class AvaManagerView implements Initializable {
     public void showAvaListData()
     {
         dataList = AvaFolderDAO.AvaList();
+        dataList.forEach(af ->{
+            if(Integer.parseInt(af.getStatus()) == -1){
+                af.setStatus("Rejeté");
+            } else if (Integer.parseInt(af.getStatus()) == 1) {
+                af.setStatus("Validé");
+            }else {
+                af.setStatus("En Attend");
+            }
+        });
         IDAva.setCellValueFactory(new PropertyValueFactory<>("ID"));
         type.setCellValueFactory(new PropertyValueFactory<>("type"));
         titulaire.setCellValueFactory(new PropertyValueFactory<>("titulaire"));
@@ -66,6 +87,7 @@ public class AvaManagerView implements Initializable {
         DroitInitial.setCellValueFactory(new PropertyValueFactory<>("DroitInitial"));
         SoldeAva.setCellValueFactory(new PropertyValueFactory<>("SoldeAva"));
         DeclarationFiscal.setCellValueFactory(new PropertyValueFactory<>("DeclarationFiscal"));
+        Status.setCellValueFactory(new PropertyValueFactory<>("Status"));
         ava_tableView.setItems(dataList);
 
     }
@@ -109,17 +131,56 @@ public class AvaManagerView implements Initializable {
 
 
     }
-    public void consulter() throws IOException {
+    public void consulterDeclaration() {
        if(SharedData.currentAva == null)
             return;
-        openFolder_bnt.getScene().getWindow().hide();
+        try {
+            String imagePath = SharedData.currentAva.getDeclarationFiscal();
+            File file = new File(imagePath);
+            if (Desktop.isDesktopSupported()) {
+                Desktop desktop = Desktop.getDesktop();
+                if (file.exists()) {
+                    desktop.open(file);
+                } else {
+                    System.err.println("File does not exist: " + imagePath);
+                }
+            } else {
+                System.err.println("Desktop is not supported on this platform");
+            }
+        } catch (IOException | IllegalArgumentException e) {
+            System.err.println("Error opening image: " + e.getMessage());
+        }
 
-        Parent root = FXMLLoader.load(getClass().getResource("/com/example/demo/consulter-ava.fxml"));
-        Stage stage = new Stage();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-
+    }
+    public void valider(){
+        if(SharedData.currentAva == null)
+            return;
+        Alert alert;
+        alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Message");
+        alert.setHeaderText(null);
+        alert.setContentText("Valider le dossier de titulaire : "+ SharedData.currentAva.getTitulaire()+" ?");
+        Optional<ButtonType> option = alert.showAndWait();
+        if(option.get().equals(ButtonType.OK)){
+            AvaFolderDAO.ChangeStatus(SharedData.currentAva.getID(),"1");
+            showAvaListData();
+            avaSearch();
+        }
+    }
+    public void rejeter(){
+        if(SharedData.currentAva == null)
+            return;
+        Alert alert;
+        alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Message");
+        alert.setHeaderText(null);
+        alert.setContentText("Rejeter le dossier de titulaire : "+ SharedData.currentAva.getTitulaire()+" ?");
+        Optional<ButtonType> option = alert.showAndWait();
+        if(option.get().equals(ButtonType.OK)){
+            AvaFolderDAO.ChangeStatus(SharedData.currentAva.getID(),"-1");
+            showAvaListData();
+            avaSearch();
+        }
     }
 
 

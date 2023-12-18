@@ -115,8 +115,8 @@ public class AvaFolderView implements Initializable {
                         Double.parseDouble(droitInit_field.getText()),
                         Double.parseDouble(soldeAva_field.getText()),
                         dateDomiciliation_field.getText(),
-                        urf
-                );
+                        urf,
+                        "0");
 
                 AvaFolderDAO.ajouterDossierAva(folderAva);
                 createAva_btn.getScene().getWindow().hide();

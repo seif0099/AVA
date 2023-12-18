@@ -6,6 +6,7 @@ module com.example.demo {
     requires com.dlsc.formsfx;
     requires com.almasb.fxgl.all;
     requires java.sql;
+    requires java.desktop;
 
     opens com.example.demo to javafx.fxml;
     opens com.example.demo.Controllers to javafx.fxml;

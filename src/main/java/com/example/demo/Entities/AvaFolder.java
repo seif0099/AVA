@@ -9,8 +9,9 @@ public class AvaFolder {
     private Double SoldeAva;
     private String DateDomiciliation;
     private String DeclarationFiscal;
+    private String Status;
 
-    public AvaFolder(Integer ID, String type, Integer titulaire, Double montantCalcul, Double droitInitial, Double soldeAva, String dateDomiciliation, String declarationFiscal) {
+    public AvaFolder(Integer ID, String type, Integer titulaire, Double montantCalcul, Double droitInitial, Double soldeAva, String dateDomiciliation, String declarationFiscal, String status) {
         this.ID = ID;
         Type = type;
         Titulaire = titulaire;
@@ -19,6 +20,7 @@ public class AvaFolder {
         SoldeAva = soldeAva;
         DateDomiciliation = dateDomiciliation;
         DeclarationFiscal = declarationFiscal;
+        Status = status;
     }
 
     public Integer getID() {
@@ -96,6 +98,15 @@ public class AvaFolder {
                 ", SoldeAva=" + SoldeAva +
                 ", DateDomiciliation='" + DateDomiciliation + '\'' +
                 ", DeclarationFiscal='" + DeclarationFiscal + '\'' +
+                ", Status='" + Status + '\'' +
                 '}';
+    }
+
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String status) {
+        Status = status;
     }
 }

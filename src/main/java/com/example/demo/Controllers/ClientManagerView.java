@@ -48,7 +48,18 @@ public class ClientManagerView implements Initializable {
     private TextField searchClient_field;
     @FXML
     private Button openFolder_bnt;
+    @FXML
+    private Button logout;
     private ObservableList<Client> dataList;
+
+    public void Logout() throws IOException {
+        logout.getScene().getWindow().hide();
+        Parent root = FXMLLoader.load(getClass().getResource("/com/example/demo/login-view.fxml"));
+        Stage stage = new Stage();
+        Scene scene = new Scene(root,600,400);;
+        stage.setScene(scene);
+        stage.show();
+    }
 
     public void showClientsListData()
     {
